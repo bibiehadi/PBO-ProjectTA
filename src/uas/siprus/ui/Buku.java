@@ -64,6 +64,9 @@ public class Buku extends javax.swing.JInternalFrame {
 
         tutupButton.setText("Tutup");
 
+        searchForm.setText("search");
+        searchForm.setToolTipText("");
+
         cariButton.setText("Cari");
         cariButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
