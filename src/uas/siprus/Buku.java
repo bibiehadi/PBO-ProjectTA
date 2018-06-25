@@ -9,50 +9,24 @@ package uas.siprus;
  *
  * @author null
  */
-public class Buku {
-    private String kdBuku;
-    private String judulBuku;
-    private String penerbitBuku;
-    private int jumlahBuku;
-    private int tanggalMasuk;
-
-    public String getKdBuku() {
-        return kdBuku;
+public class Buku extends Bacaan{
+    private String pengarangBuku;
+    private String kategoriBuku;
+    
+    public String getPengarangBuku() {
+        return pengarangBuku;
     }
 
-    public void setKdBuku(String kdBuku) {
-        this.kdBuku = kdBuku;
+    public void setPengarangBuku(String pengarangBuku) {
+        this.pengarangBuku = pengarangBuku;
     }
 
-    public String getJudulBuku() {
-        return judulBuku;
+    public String getKategoriBuku() {
+        return kategoriBuku;
     }
 
-    public void setJudulBuku(String judulBuku) {
-        this.judulBuku = judulBuku;
+    public void setKategoriBuku(String kategoriBuku) {
+        this.kategoriBuku = kategoriBuku;
     }
-
-    public String getPenerbitBuku() {
-        return penerbitBuku;
-    }
-
-    public void setPenerbitBuku(String penerbitBuku) {
-        this.penerbitBuku = penerbitBuku;
-    }
-
-    public int getJumlahBuku() {
-        return jumlahBuku;
-    }
-
-    public void setJumlahBuku(int jumlahBuku) {
-        this.jumlahBuku = jumlahBuku;
-    }
-
-    public int getTanggalMasuk() {
-        return tanggalMasuk;
-    }
-
-    public void setTanggalMasuk(int tanggalMasuk) {
-        this.tanggalMasuk = tanggalMasuk;
-    }
+   
 }

@@ -11,11 +11,36 @@ package uas.siprus.ui;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    static MainFrame instance = null;
+    static BukuFrame bukuFrame = null;
+    static BukuDetail bukuDetail = null;
+    static AnggotaFrame anggotaFrame = null;
+    static AnggotaDetail anggotaDetail = null;
+    
+    public static MainFrame getInstance(){
+        if (instance == null) {
+            instance = new MainFrame();
+        }
+        return instance;
+    }
+    
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        
+        bukuFrame = BukuFrame.getInstance();
+        this.desktopPane.add(bukuFrame);
+        
+        bukuDetail = BukuDetail.getInstance();
+        this.desktopPane.add(bukuDetail);
+        
+        anggotaFrame = AnggotaFrame.getInstance();
+        this.desktopPane.add(anggotaFrame);
+        
+        anggotaDetail = AnggotaDetail.getInstance();
+        this.desktopPane.add(anggotaDetail);
     }
 
     /**
@@ -27,38 +52,53 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        desktopPane = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         Menu = new javax.swing.JMenu();
-        Buku = new javax.swing.JMenu();
         Anggota = new javax.swing.JMenu();
         Peminjaman = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         Help = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+        javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
+        desktopPane.setLayout(desktopPaneLayout);
+        desktopPaneLayout.setHorizontalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 799, Short.MAX_VALUE)
         );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 479, Short.MAX_VALUE)
+        desktopPaneLayout.setVerticalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 550, Short.MAX_VALUE)
         );
 
         Menu.setText("Menu");
-        jMenuBar1.add(Menu);
-
-        Buku.setText("Buku");
-        jMenuBar1.add(Buku);
 
         Anggota.setText("Anggota");
-        jMenuBar1.add(Anggota);
+        Menu.add(Anggota);
 
         Peminjaman.setText("Peminjaman");
-        jMenuBar1.add(Peminjaman);
+        Menu.add(Peminjaman);
+
+        jMenuItem1.setText("Buku");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem1);
+
+        jMenuItem2.setText("jMenuItem2");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        Menu.add(jMenuItem2);
+
+        jMenuBar1.add(Menu);
 
         Help.setText("Help");
         jMenuBar1.add(Help);
@@ -69,15 +109,29 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(desktopPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        bukuFrame.tampilkanListBuku(null);
+        bukuFrame.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        anggotaFrame.tampilkanListAnggota(null);
+        anggotaFrame.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,11 +170,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Anggota;
-    private javax.swing.JMenu Buku;
     private javax.swing.JMenu Help;
     private javax.swing.JMenu Menu;
     private javax.swing.JMenu Peminjaman;
-    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     // End of variables declaration//GEN-END:variables
 }

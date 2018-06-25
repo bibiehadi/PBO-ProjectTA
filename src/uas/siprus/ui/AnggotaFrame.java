@@ -5,12 +5,27 @@
  */
 package uas.siprus.ui;
 
+import java.sql.SQLException;
+import java.util.List;
+import uas.siprus.Anggota;
+import uas.siprus.model.AnggotaDataTable;
+import uas.siprus.model.AnggotaModel;
+
 /**
  *
  * @author null
  */
 public class AnggotaFrame extends javax.swing.JInternalFrame {
 
+    static AnggotaFrame instance = null;
+    List<Anggota> dataAnggota;
+    
+    public static AnggotaFrame getInstance(){
+        if (instance == null) {
+            instance = new AnggotaFrame();
+        }
+        return instance;
+    }
     /**
      * Creates new form Anggota
      */
@@ -53,17 +68,17 @@ public class AnggotaFrame extends javax.swing.JInternalFrame {
 
         anggotaTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID Anggota", "Nama", "Jenis Kelamin", "Pekerjaan"
+                "ID Anggota", "Nama", "Pekerjaan"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -77,8 +92,18 @@ public class AnggotaFrame extends javax.swing.JInternalFrame {
         }
 
         detailButton.setText("Lihat Detail");
+        detailButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detailButtonActionPerformed(evt);
+            }
+        });
 
         tambahButton.setText("Tambah Anggota");
+        tambahButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tambahButtonActionPerformed(evt);
+            }
+        });
 
         tutupButton.setText("Tutup");
 
@@ -134,6 +159,18 @@ public class AnggotaFrame extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void detailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailButtonActionPerformed
+        // TODO add your handling code here:
+        AnggotaDetail anggotaDetail = AnggotaDetail.getInstance();
+        anggotaDetail.tampilDetailAnggota(anggotaTable.getValueAt(anggotaTable.getSelectedRow(),0).toString());
+    }//GEN-LAST:event_detailButtonActionPerformed
+
+    private void tambahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahButtonActionPerformed
+        // TODO add your handling code here:
+        AnggotaDetail anggotaDetail = AnggotaDetail.getInstance();
+        anggotaDetail.aktifkanModeForm(AnggotaDetail.MODE_TAMBAH);
+    }//GEN-LAST:event_tambahButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane anggotaScroll;
@@ -146,4 +183,17 @@ public class AnggotaFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton tambahButton;
     private javax.swing.JButton tutupButton;
     // End of variables declaration//GEN-END:variables
+    public void tampilkanListAnggota(String param){
+        try{
+            dataAnggota = AnggotaModel.getInstance().getListAnggota(param);          
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        
+        anggotaTable.setModel(new AnggotaDataTable(dataAnggota));
+        if (anggotaTable.getModel().getRowCount()>0) {
+            anggotaTable.setRowSelectionInterval(0,0);
+        }
+    }
+    
 }

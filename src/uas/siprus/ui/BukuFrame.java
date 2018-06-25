@@ -5,12 +5,27 @@
  */
 package uas.siprus.ui;
 
+import java.sql.SQLException;
+import java.util.List;
+import uas.siprus.Buku;
+import uas.siprus.model.BukuDataTable;
+import uas.siprus.model.BukuModel;
+
 /**
  *
  * @author null
  */
 public class BukuFrame extends javax.swing.JInternalFrame {
 
+    static BukuFrame instance = null;
+    List<Buku> dataBuku;
+    
+    public static BukuFrame getInstance(){
+        if (instance == null) {
+            instance = new BukuFrame();
+        }
+        return instance;
+    }
     /**
      * Creates new form Buku
      */
@@ -61,8 +76,18 @@ public class BukuFrame extends javax.swing.JInternalFrame {
         });
 
         tambahButton.setText("Tambah Buku");
+        tambahButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tambahButtonActionPerformed(evt);
+            }
+        });
 
         tutupButton.setText("Tutup");
+        tutupButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tutupButtonActionPerformed(evt);
+            }
+        });
 
         searchForm.setText("search");
         searchForm.setToolTipText("");
@@ -89,6 +114,13 @@ public class BukuFrame extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bukuScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(searchForm, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cariButton)
+                        .addGap(2, 2, 2)
+                        .addComponent(resetButton))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -97,14 +129,7 @@ public class BukuFrame extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tambahButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tutupButton))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(searchForm, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cariButton)
-                        .addGap(2, 2, 2)
-                        .addComponent(resetButton)))
+                        .addComponent(tutupButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -119,12 +144,12 @@ public class BukuFrame extends javax.swing.JInternalFrame {
                     .addComponent(resetButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bukuScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(detailButton)
                     .addComponent(tambahButton)
                     .addComponent(tutupButton))
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -132,15 +157,32 @@ public class BukuFrame extends javax.swing.JInternalFrame {
 
     private void detailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailButtonActionPerformed
         // TODO add your handling code here:
+        BukuDetail bukuDetail = BukuDetail.getInstance();
+        bukuDetail.tampilDetailBuku(bukuTable.getValueAt(bukuTable.getSelectedRow(), 0).toString());
+       
     }//GEN-LAST:event_detailButtonActionPerformed
 
     private void cariButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariButtonActionPerformed
         // TODO add your handling code here:
+        tampilkanListBuku(searchForm.getText());
     }//GEN-LAST:event_cariButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
+        searchForm.setText("");
+        tampilkanListBuku(null);
     }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void tutupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tutupButtonActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_tutupButtonActionPerformed
+
+    private void tambahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahButtonActionPerformed
+        // TODO add your handling code here:
+        BukuDetail bukuDetail = BukuDetail.getInstance();
+        bukuDetail.aktifkanModeForm(BukuDetail.MODE_TAMBAH);
+    }//GEN-LAST:event_tambahButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -154,4 +196,16 @@ public class BukuFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton tambahButton;
     private javax.swing.JButton tutupButton;
     // End of variables declaration//GEN-END:variables
+    public void tampilkanListBuku(String param){
+        try{
+            dataBuku = BukuModel.getInstance().getListBuku(param);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        
+        bukuTable.setModel(new BukuDataTable(dataBuku));
+        if (bukuTable.getModel().getRowCount()>0) {
+            bukuTable.setRowSelectionInterval(0, 0);
+        }
+    }
 }

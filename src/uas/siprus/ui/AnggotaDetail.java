@@ -5,17 +5,125 @@
  */
 package uas.siprus.ui;
 
+import java.awt.CardLayout;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import uas.siprus.Anggota;
+import uas.siprus.model.AnggotaModel;
+
 /**
  *
  * @author null
  */
 public class AnggotaDetail extends javax.swing.JInternalFrame {
 
+    static AnggotaDetail instance;
+    AnggotaModel anggotaModel;
+    int modeForm;
+
+    public static final int MODE_TAMPIL = 0;
+    public static final int MODE_EDIT = 1;
+    public static final int MODE_TAMBAH = 2;
+
     /**
      * Creates new form AnggotaDetail
      */
+    public static AnggotaDetail getInstance() {
+        if (instance == null) {
+            instance = new AnggotaDetail();
+        }
+        return instance;
+    }
+
     public AnggotaDetail() {
         initComponents();
+
+        try {
+            anggotaModel = AnggotaModel.getInstance();
+        } catch (SQLException ex) {
+            Logger.getLogger(AnggotaDetail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void tampilDetailAnggota(String kdDetail) {
+        Anggota anggota = new Anggota();
+        try {
+            anggota = anggotaModel.findAnggota(kdDetail);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "SQL ERROR");
+            ex.printStackTrace();
+        }
+
+        labelKode.setText(anggota.getKdAnggota());
+        kdAnggota.setText(anggota.getKdAnggota());
+
+        labelNama.setText(anggota.getNamaAnggota());
+        namaAnggota.setText(anggota.getNamaAnggota());
+
+        labelAlamat.setText(anggota.getAlamatAnggota());
+        alamatAnggota.setText(anggota.getAlamatAnggota());
+
+        if (anggota.getJkAnggota()== "L") {
+            labelJK.setText("Laki - Laki");
+            rdLaki.setSelected(true);
+        }else{
+            labelJK.setText("Perempuan");
+            rdPerempuan.setSelected(true);
+        }
+        
+        labelJK.setText(anggota.getJkAnggota());
+//        jkAnggota.setText(anggota.getKdAnggota());
+
+//        labelTanggal.setText(anggota.getKdAnggota());
+//        tanggalLahirAnggota.setText(anggota.getKdAnggota());
+
+        labelPekerjaan.setText(anggota.getPekerjaanAnggota());
+        pekerjaanAnggota.setText(anggota.getPekerjaanAnggota());
+        labelTelp.setText(anggota.getNoTelp());
+        noTelpAnggota.setText(anggota.getNoTelp());
+
+        this.aktifkanModeForm(MODE_TAMPIL);
+        this.setVisible(true);
+
+    }
+
+    public void aktifkanModeForm(int modForm) {
+        this.modeForm = modForm;
+        aturUlangForm();
+
+        this.setVisible(true);
+    }
+
+    private void aturUlangForm() {
+        CardLayout formLayout = (CardLayout) formPanel.getLayout();
+        if (this.modeForm == MODE_TAMPIL) {
+            formLayout.show(formPanel, "detail");
+            
+            buttonUbah.setEnabled(true);
+            buttonSimpan.setEnabled(false);
+            buttonReset.setEnabled(false);
+            
+        }else{
+            formLayout.show(formPanel,"edit");
+            buttonUbah.setEnabled(false);
+            buttonSimpan.setEnabled(true);
+            buttonHapus.setEnabled(false);
+            buttonReset.setEnabled(false);
+            kdAnggota.setEditable(false);
+            if (this.modeForm==MODE_TAMBAH) {
+                kdAnggota.setText("");
+                kdAnggota.setEditable(true);
+                kdAnggota.requestFocus();
+                namaAnggota.setText("");
+                alamatAnggota.setText("");
+                pekerjaanAnggota.setText("");
+                noTelpAnggota.setText("");
+                buttonReset.setEnabled(true);
+                
+            }
+        }
     }
 
     /**
@@ -27,21 +135,477 @@ public class AnggotaDetail extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jLabel1 = new javax.swing.JLabel();
+        formPanel = new javax.swing.JPanel();
+        edit = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        kdAnggota = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        namaAnggota = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        alamatAnggota = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        rdLaki = new javax.swing.JRadioButton();
+        rdPerempuan = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
+        tanggal = new javax.swing.JComboBox<>();
+        bulan = new javax.swing.JComboBox<>();
+        tahun = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        pekerjaanAnggota = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        noTelpAnggota = new javax.swing.JTextField();
+        detail = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        labelKode = new javax.swing.JLabel();
+        labelNama = new javax.swing.JLabel();
+        labelAlamat = new javax.swing.JLabel();
+        labelJK = new javax.swing.JLabel();
+        labelTanggal = new javax.swing.JLabel();
+        labelPekerjaan = new javax.swing.JLabel();
+        labelTelp = new javax.swing.JLabel();
+        buttonPanel = new javax.swing.JPanel();
+        buttonUbah = new javax.swing.JButton();
+        buttonSimpan = new javax.swing.JButton();
+        buttonHapus = new javax.swing.JButton();
+        buttonTutup = new javax.swing.JButton();
+        buttonReset = new javax.swing.JButton();
+        fotoPanel = new javax.swing.JPanel();
+        labelFoto = new javax.swing.JLabel();
+        labelKlikFoto = new javax.swing.JLabel();
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setText("List Anggota");
+
+        formPanel.setLayout(new java.awt.CardLayout());
+
+        jLabel2.setText("Kode Anggota");
+
+        jLabel3.setText("Nama");
+
+        jLabel4.setText("Alamat");
+
+        jLabel5.setText("Jenis Kelamin");
+
+        buttonGroup1.add(rdLaki);
+        rdLaki.setText("Laki - Laki");
+
+        buttonGroup1.add(rdPerempuan);
+        rdPerempuan.setText("Perempuan");
+
+        jLabel6.setText("Tanggal Lahir");
+
+        tanggal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        bulan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        tahun.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel7.setText("Pekerjaan");
+
+        jLabel8.setText("No Telphone");
+
+        javax.swing.GroupLayout editLayout = new javax.swing.GroupLayout(edit);
+        edit.setLayout(editLayout);
+        editLayout.setHorizontalGroup(
+            editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(editLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addGap(49, 49, 49)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(kdAnggota, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(namaAnggota, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(alamatAnggota, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(editLayout.createSequentialGroup()
+                        .addComponent(tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bulan, 0, 80, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tahun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pekerjaanAnggota)
+                    .addGroup(editLayout.createSequentialGroup()
+                        .addComponent(rdLaki)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rdPerempuan)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(noTelpAnggota))
+                .addContainerGap())
+        );
+        editLayout.setVerticalGroup(
+            editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(editLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(kdAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(namaAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(alamatAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(rdLaki)
+                    .addComponent(rdPerempuan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bulan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tahun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(pekerjaanAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(editLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(noTelpAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        formPanel.add(edit, "edit");
+
+        jLabel9.setText("No Telphone");
+
+        jLabel10.setText("Nama");
+
+        jLabel11.setText("Tanggal Lahir");
+
+        jLabel12.setText("Alamat");
+
+        jLabel13.setText("Jenis Kelamin");
+
+        jLabel14.setText("Pekerjaan");
+
+        jLabel15.setText("Kode Anggota");
+
+        labelKode.setText("kdAnggota");
+
+        labelNama.setText("namaAnggota");
+
+        labelAlamat.setText("alamatAnggota");
+
+        labelJK.setText("jkAnggota");
+
+        labelTanggal.setText("tanggalAnggota");
+
+        labelPekerjaan.setText("pekerjaanAnggota");
+
+        labelTelp.setText("telpAnggota");
+
+        javax.swing.GroupLayout detailLayout = new javax.swing.GroupLayout(detail);
+        detail.setLayout(detailLayout);
+        detailLayout.setHorizontalGroup(
+            detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(detailLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel15))
+                .addGap(53, 53, 53)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelTelp)
+                    .addComponent(labelPekerjaan)
+                    .addComponent(labelTanggal)
+                    .addComponent(labelJK)
+                    .addComponent(labelAlamat)
+                    .addComponent(labelNama)
+                    .addComponent(labelKode))
+                .addContainerGap(117, Short.MAX_VALUE))
+        );
+        detailLayout.setVerticalGroup(
+            detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(detailLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelKode)
+                    .addComponent(jLabel15))
+                .addGap(18, 18, 18)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelNama)
+                    .addComponent(jLabel10))
+                .addGap(18, 18, 18)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelAlamat)
+                    .addComponent(jLabel12))
+                .addGap(18, 18, 18)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(labelJK))
+                .addGap(18, 18, 18)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelTanggal)
+                    .addComponent(jLabel11))
+                .addGap(18, 18, 18)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPekerjaan)
+                    .addComponent(jLabel14))
+                .addGap(18, 18, 18)
+                .addGroup(detailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(labelTelp))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        formPanel.add(detail, "detail");
+
+        buttonUbah.setText("Ubah Data");
+        buttonUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonUbahActionPerformed(evt);
+            }
+        });
+
+        buttonSimpan.setText("Simpan");
+        buttonSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSimpanActionPerformed(evt);
+            }
+        });
+
+        buttonHapus.setText("Hapus");
+        buttonHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonHapusActionPerformed(evt);
+            }
+        });
+
+        buttonTutup.setText("Tutup");
+        buttonTutup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonTutupActionPerformed(evt);
+            }
+        });
+
+        buttonReset.setText("Reset");
+
+        javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
+        buttonPanel.setLayout(buttonPanelLayout);
+        buttonPanelLayout.setHorizontalGroup(
+            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(buttonUbah)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonSimpan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonReset)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonHapus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(buttonTutup)
+                .addContainerGap())
+        );
+        buttonPanelLayout.setVerticalGroup(
+            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonUbah)
+                    .addComponent(buttonSimpan)
+                    .addComponent(buttonHapus)
+                    .addComponent(buttonTutup)
+                    .addComponent(buttonReset))
+                .addContainerGap())
+        );
+
+        labelFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        labelFoto.setMaximumSize(new java.awt.Dimension(150, 150));
+        labelFoto.setMinimumSize(new java.awt.Dimension(150, 150));
+        labelFoto.setPreferredSize(new java.awt.Dimension(100, 100));
+        labelFoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelFotoMouseClicked(evt);
+            }
+        });
+        fotoPanel.add(labelFoto);
+
+        labelKlikFoto.setFont(new java.awt.Font("Tahoma", 2, 10)); // NOI18N
+        labelKlikFoto.setText("Klik foto untuk mengubah");
+        fotoPanel.add(labelKlikFoto);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 485, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(formPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(fotoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 9, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(formPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fotoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void labelFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelFotoMouseClicked
+        // TODO add your handling code here:
+//        if (this.modeForm != MODE_TAMPIL) {
+//            if (imageChooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION) {
+//                labelFoto.setIcon(new ImageIcon(imageChooser.getSelectedFile().getAbsolutePath()));
+//            }
+//        }
+    }//GEN-LAST:event_labelFotoMouseClicked
+
+    private void buttonSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSimpanActionPerformed
+        // TODO add your handling code here:
+//        if (validasiIsiForm()) {
+        Anggota anggotaUpdate = new Anggota();
+        anggotaUpdate.setKdAnggota(kdAnggota.getText());
+        anggotaUpdate.setNamaAnggota(namaAnggota.getText());
+        anggotaUpdate.setAlamatAnggota(alamatAnggota.getText());
+        anggotaUpdate.setJkAnggota(rdLaki.isSelected() ? "L" : "P");
+        anggotaUpdate.setPekerjaanAnggota(pekerjaanAnggota.getText());
+        anggotaUpdate.setNoTelp(noTelpAnggota.getText());
+
+        Anggota anggota = new Anggota();
+        try {
+            anggota = anggotaModel.findAnggota(anggotaUpdate.getKdAnggota());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        if (anggota == null) {
+            try{
+                anggotaModel.insertAnggota(anggotaUpdate);
+            }catch (SQLException ex){
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "SQL ERROR: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            JOptionPane.showMessageDialog(this, "Data telah berhasil disimpan.", "Simpan Data", JOptionPane.INFORMATION_MESSAGE);     
+        }else{
+            int a = JOptionPane.showConfirmDialog(this,"Anggota dengan kode Anggota "+ anggotaUpdate.getKdAnggota()+" sudah ada. \n"
+            + "Apakah anda ingin mengubah data anggota tersebut ?","Simpan Data", JOptionPane.YES_NO_OPTION);
+            
+            if (a == JOptionPane.YES_OPTION) {
+                try {
+                    anggotaModel.updateAnggota(anggotaUpdate);
+                    JOptionPane.showMessageDialog(this, "Data telah berhasil disimpan.", "Simpan Data", JOptionPane.INFORMATION_MESSAGE);
+                }catch(SQLException ex){
+                    ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "SQL ERROR: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        tampilDetailAnggota(anggotaUpdate.getKdAnggota());
+        AnggotaFrame.getInstance().tampilkanListAnggota(null);
+//        }
+
+
+    }//GEN-LAST:event_buttonSimpanActionPerformed
+
+    private void buttonUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUbahActionPerformed
+        // TODO add your handling code here:
+        this.aktifkanModeForm(MODE_EDIT);
+    }//GEN-LAST:event_buttonUbahActionPerformed
+
+    private void buttonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonHapusActionPerformed
+        // TODO add your handling code here:
+        try{
+            AnggotaModel anggotaModel = AnggotaModel.getInstance();
+            anggotaModel.deleteAnggota(labelKode.getText());
+        }catch (SQLException ex){
+            Logger.getLogger(BukuDetail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_buttonHapusActionPerformed
+
+    private void buttonTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTutupActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_buttonTutupActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField alamatAnggota;
+    private javax.swing.JComboBox<String> bulan;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton buttonHapus;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JButton buttonReset;
+    private javax.swing.JButton buttonSimpan;
+    private javax.swing.JButton buttonTutup;
+    private javax.swing.JButton buttonUbah;
+    private javax.swing.JPanel detail;
+    private javax.swing.JPanel edit;
+    private javax.swing.JPanel formPanel;
+    private javax.swing.JPanel fotoPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField kdAnggota;
+    private javax.swing.JLabel labelAlamat;
+    private javax.swing.JLabel labelFoto;
+    private javax.swing.JLabel labelJK;
+    private javax.swing.JLabel labelKlikFoto;
+    private javax.swing.JLabel labelKode;
+    private javax.swing.JLabel labelNama;
+    private javax.swing.JLabel labelPekerjaan;
+    private javax.swing.JLabel labelTanggal;
+    private javax.swing.JLabel labelTelp;
+    private javax.swing.JTextField namaAnggota;
+    private javax.swing.JTextField noTelpAnggota;
+    private javax.swing.JTextField pekerjaanAnggota;
+    private javax.swing.JRadioButton rdLaki;
+    private javax.swing.JRadioButton rdPerempuan;
+    private javax.swing.JComboBox<String> tahun;
+    private javax.swing.JComboBox<String> tanggal;
     // End of variables declaration//GEN-END:variables
 }

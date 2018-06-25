@@ -9,7 +9,7 @@ package uas.siprus;
  *
  * @author null
  */
-public class MajalahdanKoran extends Buku{
+public class MajalahdanKoran extends Bacaan{
     private String edisi;
     private String tglTerbit;
 
